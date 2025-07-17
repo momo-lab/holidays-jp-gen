@@ -64,14 +64,14 @@ function filterAndFormat(holidays: HolidayRaw[], fromYear: number): string[] {
       const [y, m, d] = h.date.split('/');
       const mm = m.padStart(2, '0');
       const dd = d.padStart(2, '0');
-      return `'${y}-${mm}-${dd}': '${h.name}'`;
+      return `"${y}-${mm}-${dd}": "${h.name}",`;
     });
 }
 
 function generateTs(holidays: string[], fromYear: number): string {
   const holidays_str = holidays
     .map((v) => `  ${v}`) // インデント
-    .join(',\n');
+    .join('\n');
   return `// holidays-jp-from-${fromYear}.ts
 /**
  * @file 日本の祝日データと関連ユーティリティ
@@ -94,15 +94,15 @@ ${holidays_str}
  * @throws {Error} 無効な日付が指定された場合。
  */
 const toDateString = (date: Date | string): string => {
-  if (typeof date === 'string') {
+  if (typeof date === "string") {
     date = new Date(date);
   } else if (!(date instanceof Date)) {
-    throw new Error('Invalid date');
+    throw new Error("Invalid date");
   }
 
   const yyyy = date.getFullYear();
-  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
-  const dd = date.getDate().toString().padStart(2, '0');
+  const mm = (date.getMonth() + 1).toString().padStart(2, "0");
+  const dd = date.getDate().toString().padStart(2, "0");
   return [yyyy, mm, dd].join("-");
 };
 
