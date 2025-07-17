@@ -1,6 +1,6 @@
 {
   "name": "holidays-jp-gen",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A CLI tool to generate lightweight TypeScript holiday data modules for Japan based on official government CSV data.",
   "author": "momo-lab <momotaro.n@gmail.com>",
   "license": "MIT",
