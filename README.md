@@ -26,11 +26,13 @@ npx holidays-jp-gen --year 2020
 
 ```ts
 // holidays-jp-from-2020.ts
-export const holidays = [
+export const holidays: { [key: string]: string } = {
   { date: '2020-01-01', name: '元日' },
   { date: '2020-01-13', name: '成人の日' },
   // ...
 ];
+export const isHoliday = (date: Date | string): boolean => { ... }
+export const getHolidayName = (date: Date | string): string | null => { ... }
 ```
 
 ## 生成されたモジュールの利用方法

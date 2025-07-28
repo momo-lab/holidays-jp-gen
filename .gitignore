@@ -4,6 +4,7 @@ node_modules/
 # ビルド成果物
 dist/
 build/
+test/holidays-jp.ts
 
 # OS固有ファイル
 .DS_Store

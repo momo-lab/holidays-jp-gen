@@ -13,7 +13,8 @@
     "build": "tsc",
     "start": "node ./dist/cli.js",
     "lint": "eslint 'src/**/*.ts'",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "tsc && node ./dist/cli.js --output=test/holidays-jp.ts && node test/test.ts"
   },
   "bin": {
     "holidays-jp-gen": "./dist/cli.js"

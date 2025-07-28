@@ -83,7 +83,7 @@ function generateTs(holidays: string[], fromYear: number): string {
  * キーは 'YYYY-MM-DD' 形式の日付文字列、値は祝日名。
  * @type { [key: string]: string }
  */
-const HOLIDAYS: { [key: string]: string } = {
+export const holidays: { [key: string]: string } = {
 ${holidays_str}
 };
 
@@ -113,7 +113,7 @@ const toDateString = (date: Date | string): string => {
  */
 export const isHoliday = (date: Date | string): boolean => {
   const key = toDateString(date);
-  return key in HOLIDAYS;
+  return key in holidays;
 };
 
 /**
@@ -123,7 +123,7 @@ export const isHoliday = (date: Date | string): boolean => {
  */
 export const getHolidayName = (date: Date | string): string | null => {
   const key = toDateString(date);
-  return HOLIDAYS[key] || null;
+  return holidays[key] || null;
 };
 `;
 }
