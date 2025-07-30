@@ -18,9 +18,8 @@
     "lint-fix": "run-s -c lint-fix:*",
     "lint-fix:eslint": "eslint --fix .",
     "lint-fix:prettier": "prettier --write .",
-    "test": "pnpm run test:gen && vitest run",
-    "test:gen": "pnpm run build && node ./dist/cli.js --year 2024 --output test/holidays-jp.ts",
-    "test:watch": "vitest"
+    "test": "vitest run",
+    "test-watch": "vitest"
   },
   "bin": {
     "holidays-jp-gen": "./dist/cli.js"
