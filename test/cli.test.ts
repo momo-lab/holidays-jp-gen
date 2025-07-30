@@ -71,7 +71,7 @@ describe('main', () => {
 
   it('should generate a holiday file with a specified year and output path', async () => {
     const year = 2026;
-    const outputFile = path.join(TEST_OUTPUT_DIR, `holidays-from-${year}.ts`);
+    const outputFile = path.join(TEST_OUTPUT_DIR, `holidays-jp.ts`);
     const options = { year, output: outputFile };
 
     await main(options);
@@ -84,11 +84,12 @@ describe('main', () => {
     expect(content).not.toContain(`"${year - 1}-01-01"`); // 前年の祝日が含まれていないこと
   });
 
-  it('should generate a holiday file with the default year when no year is specified', async () => {
+  it('should generate a holiday file with the default options', async () => {
     const year = 1955;
-    const outputFile = path.join(TEST_OUTPUT_DIR, `holidays-from-default.ts`);
-    const options = { year, output: outputFile };
+    const outputFile = path.join(TEST_OUTPUT_DIR, `holidays-jp-from-1955.ts`);
+    const options = { year };
 
+    process.chdir(TEST_OUTPUT_DIR);
     await main(options);
 
     expect(fs.existsSync(outputFile)).toBe(true);
