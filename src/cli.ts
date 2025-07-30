@@ -1,30 +1,34 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
+import { Command, Option, OptionValues } from 'commander';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
 import https from 'https';
 import iconv from 'iconv-lite';
+import { fileURLToPath } from 'url';
 
 interface HolidayRaw {
   date: string; // yyyy/M/d
-  name: string; // Shift_JIS文字列（後でUTF-8化）
+  name: string;
 }
 
 const HOLIDAY_CSV_URL =
   'https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv';
+const DEFAULT_START_YEAR = 1955;
 
-const program = new Command();
+export function defineCommand(): Command {
+  const program = new Command();
+  program
+    .addOption(
+      new Option('-y, --year <year>', '開始年')
+        .default(DEFAULT_START_YEAR)
+        .argParser(Number)
+    )
+    .option('-o, --output <path>', '出力ファイルパス');
+  return program;
+}
 
-program
-  .option('-y, --year <year>', '開始年')
-  .option('-o, --output <path>', '出力ファイルパス');
-
-program.parse(process.argv);
-
-const options = program.opts();
-
-async function downloadCsv(): Promise<Buffer> {
+export async function downloadCsv(): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     https.get(HOLIDAY_CSV_URL, (res) => {
       const chunks: Buffer[] = [];
@@ -35,32 +39,29 @@ async function downloadCsv(): Promise<Buffer> {
   });
 }
 
-function parseCsv(buffer: Buffer): HolidayRaw[] {
-  // Shift_JIS -> UTF-8
+export function parseCsv(buffer: Buffer): HolidayRaw[] {
   const utf8Str = iconv.decode(buffer, 'Shift_JIS');
-
   const records = parse(utf8Str, {
     columns: true,
     skip_empty_lines: true,
   }) as Record<string, string>[];
 
-  // カラム名は日付と祝日名の想定、例： '国民の祝日・休日の日付', '名称'
-  // 適宜調整してください
-
   return records.map((r) => ({
-    date: r['国民の祝日・休日月日'], // yyyy/M/d形式
+    date: r['国民の祝日・休日月日'],
     name: r['国民の祝日・休日名称'],
   }));
 }
 
-function filterAndFormat(holidays: HolidayRaw[], fromYear: number): string[] {
+export function filterAndFormat(
+  holidays: HolidayRaw[],
+  fromYear: number
+): string[] {
   return holidays
     .filter((h) => {
       const y = Number(h.date.split('/')[0]);
       return y >= fromYear;
     })
     .map((h) => {
-      // yyyy/M/d → yyyy-MM-dd
       const [y, m, d] = h.date.split('/');
       const mm = m.padStart(2, '0');
       const dd = d.padStart(2, '0');
@@ -68,10 +69,8 @@ function filterAndFormat(holidays: HolidayRaw[], fromYear: number): string[] {
     });
 }
 
-function generateTs(holidays: string[], fromYear: number): string {
-  const holidays_str = holidays
-    .map((v) => `  ${v}`) // インデント
-    .join('\n');
+export function generateTs(holidays: string[], fromYear: number): string {
+  const holidays_str = holidays.map((v) => `  ${v}`).join('\n');
   return `// holidays-jp-from-${fromYear}.ts
 /**
  * @file 日本の祝日データと関連ユーティリティ
@@ -128,32 +127,34 @@ export const getHolidayName = (date: Date | string): string | null => {
 `;
 }
 
-async function main() {
-  try {
-    const fromYear = Number(options.year || '1955');
-    if (isNaN(fromYear)) {
-      console.error('年は数値で指定してください');
-      process.exit(1);
-    }
+export async function main(options: OptionValues) {
+  const { year, output } = options;
 
-    console.log('祝日CSVをダウンロード中...');
-    const buffer = await downloadCsv();
-
-    console.log('CSVを解析中...');
-    const rawHolidays = parseCsv(buffer);
-
-    console.log(`指定年 ${fromYear} 以降でフィルタリング中...`);
-    const filtered = filterAndFormat(rawHolidays, fromYear);
-
-    const outputPath = options.output || `holidays-jp-from-${fromYear}.ts`;
-    console.log(`ファイルを出力中: ${outputPath}`);
-    fs.writeFileSync(outputPath, generateTs(filtered, fromYear), 'utf-8');
-
-    console.log('完了しました！');
-  } catch (e) {
-    console.error('エラー:', e);
+  if (isNaN(year)) {
+    console.error("error: option '-y, --year <year>' argument is not a number");
     process.exit(1);
   }
+
+  console.log('祝日CSVをダウンロード中...');
+  const buffer = await downloadCsv();
+
+  console.log('CSVを解析中...');
+  const rawHolidays = parseCsv(buffer);
+
+  console.log(`指定年 ${year} 以降でフィルタリング中...`);
+  const filtered = filterAndFormat(rawHolidays, year);
+
+  const outputPath = output || `holidays-jp-from-${year}.ts`;
+  console.log(`ファイルを出力中: ${outputPath}`);
+  fs.writeFileSync(outputPath, generateTs(filtered, year), 'utf-8');
+
+  console.log('完了しました！');
 }
 
-main();
+// このファイルが直接実行された場合のみ、CLIとして動作する
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+if (isMain) {
+  const command = defineCommand();
+  command.action(main);
+  command.parseAsync(process.argv);
+}

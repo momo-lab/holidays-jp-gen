@@ -14,7 +14,9 @@
     "start": "node ./dist/cli.js",
     "lint": "eslint 'src/**/*.ts'",
     "format": "prettier --write .",
-    "test": "tsc && node ./dist/cli.js --output=test/holidays-jp.ts && node test/test.ts"
+    "test": "pnpm run test:gen && vitest run",
+    "test:gen": "pnpm run build && node ./dist/cli.js --year 2024 --output test/holidays-jp.ts",
+    "test:watch": "vitest"
   },
   "bin": {
     "holidays-jp-gen": "./dist/cli.js"
@@ -45,6 +47,7 @@
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-sort-package-json": "^1.1.0",
     "typescript": "^5.0.0",
-    "typescript-eslint": "^8.37.0"
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
   }
 }
