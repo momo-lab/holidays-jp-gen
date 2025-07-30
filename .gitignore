@@ -33,3 +33,5 @@ yarn.lock
 
 # テストカバレッジレポート
 coverage/
+
+.claude/

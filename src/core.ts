@@ -1,5 +1,5 @@
+import https from 'node:https';
 import { parse } from 'csv-parse/sync';
-import https from 'https';
 import iconv from 'iconv-lite';
 
 interface HolidayRaw {
@@ -29,8 +29,8 @@ export function parseCsv(buffer: Buffer): HolidayRaw[] {
   }) as Record<string, string>[];
 
   return records.map((r) => ({
-    date: r['国民の祝日・休日月日'],
-    name: r['国民の祝日・休日名称'],
+    date: r.国民の祝日・休日月日,
+    name: r.国民の祝日・休日名称,
   }));
 }
 

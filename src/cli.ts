@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { Command, Option, OptionValues } from 'commander';
-import fs from 'fs';
+import fs from 'node:fs';
+import { Command, Option, type OptionValues } from 'commander';
 import { downloadCsv, generateTs, parseCsv } from './core.js';
 
 const DEFAULT_START_YEAR = 1955;
@@ -21,7 +21,7 @@ export function defineCommand(): Command {
 export async function main(options: OptionValues) {
   const { year, output } = options;
 
-  if (isNaN(year)) {
+  if (Number.isNaN(year)) {
     console.error("error: option '-y, --year <year>' argument is not a number");
     process.exit(1);
   }

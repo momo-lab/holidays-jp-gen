@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 
 describe('CLI E2E Test', () => {
