@@ -2,7 +2,6 @@
 
 import { Command, Option, OptionValues } from 'commander';
 import fs from 'fs';
-import { pathToFileURL } from 'url';
 import { downloadCsv, generateTs, parseCsv } from './core.js';
 
 const DEFAULT_START_YEAR = 1955;
@@ -35,12 +34,4 @@ export async function main(options: OptionValues) {
   fs.writeFileSync(outputPath, generateTs(holidays, year), 'utf-8');
 
   console.log('Done!');
-}
-
-// Run as CLI only when this file is executed directly
-const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
-if (isMain) {
-  const command = defineCommand();
-  command.action(main);
-  command.parseAsync(process.argv);
 }

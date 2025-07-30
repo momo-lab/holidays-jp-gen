@@ -11,7 +11,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "postbuild": "chmod +x dist/cli.js",
+    "postbuild": "chmod +x dist/cli-entry.js",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint .",
@@ -21,10 +21,11 @@
     "lint-fix:prettier": "prettier --write .",
     "test": "vitest run",
     "test-watch": "vitest",
+    "prepack": "npm run build",
     "prepublishOnly": "npm run build"
   },
   "bin": {
-    "holidays-jp-gen": "./dist/cli.js"
+    "holidays-jp-gen": "./dist/cli-entry.js"
   },
   "files": [
     "dist",

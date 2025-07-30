@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('CLI E2E Test', () => {
   it('should display help text and exit gracefully when --help is used', () => {
-    const command = `node dist/cli.js --help`;
+    const command = `node dist/cli-entry.js --help`;
 
     // コマンドを実行し、出力を取得する
     // 正常終了 (exit code 0) するはずなので、エラーは発生しない想定

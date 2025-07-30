@@ -35,26 +35,30 @@ describe('defineCommand', () => {
 
   it('should define the --year option with a default value', () => {
     const program = defineCommand();
-    const options = program.parse(['node', 'cli.js']).opts();
+    const options = program.parse(['node', 'cli-entry.js']).opts();
     expect(options.year).toBe(1955);
   });
 
   it('should parse numeric year input correctly', () => {
     const program = defineCommand();
-    const options = program.parse(['node', 'cli.js', '--year', '2024']).opts();
+    const options = program
+      .parse(['node', 'cli-entry.js', '--year', '2024'])
+      .opts();
     expect(options.year).toBe(2024);
   });
 
   it('should return NaN for non-numeric year input', () => {
     const program = defineCommand();
-    const options = program.parse(['node', 'cli.js', '--year', 'abc']).opts();
+    const options = program
+      .parse(['node', 'cli-entry.js', '--year', 'abc'])
+      .opts();
     expect(options.year).toBeNaN();
   });
 
   it('should define the --output option', () => {
     const program = defineCommand();
     const options = program
-      .parse(['node', 'cli.js', '--output', 'test.ts'])
+      .parse(['node', 'cli-entry.js', '--output', 'test.ts'])
       .opts();
     expect(options.output).toBe('test.ts');
   });
