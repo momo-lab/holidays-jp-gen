@@ -12,7 +12,7 @@ describe('CLI E2E Test', () => {
     }).toString();
 
     // ヘルプの基本的な要素が含まれているかを確認
-    expect(output).toContain('Usage: cli [options]');
+    expect(output).toContain('Usage: cli-entry [options]');
     expect(output).toContain('Options:');
     expect(output).toContain('--year <year>');
     expect(output).toContain('--output <path>');
