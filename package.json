@@ -19,12 +19,16 @@
     "lint-fix:eslint": "eslint --fix .",
     "lint-fix:prettier": "prettier --write .",
     "test": "vitest run",
-    "test-watch": "vitest"
+    "test-watch": "vitest",
+    "prepublishOnly": "npm run build"
   },
   "bin": {
     "holidays-jp-gen": "./dist/cli.js"
   },
-  "main": "index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [
     "japan",
     "holiday",
