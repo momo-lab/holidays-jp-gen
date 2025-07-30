@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { filterAndFormat, generateTs, parseCsv } from '../src/core';
+import { generateTs, parseCsv } from '../src/core';
 
 const HOLIDAYS_JP_PATH = path.resolve(os.tmpdir(), 'holidays-jp.ts');
 const FIXTURES_CSV_PATH = path.resolve(__dirname, 'fixtures/syukujitsu.csv');

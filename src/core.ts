@@ -94,7 +94,10 @@ export const getHolidayName = (date: Date | string): string | null => {
 `;
 }
 
-export function filterAndFormat(holidays: HolidayRaw[], fromYear: number): string[] {
+export function filterAndFormat(
+  holidays: HolidayRaw[],
+  fromYear: number
+): string[] {
   return holidays
     .filter((h) => {
       const y = Number(h.date.split('/')[0]);
@@ -107,4 +110,3 @@ export function filterAndFormat(holidays: HolidayRaw[], fromYear: number): strin
       return `"${y}-${mm}-${dd}": "${h.name}",`;
     });
 }
-

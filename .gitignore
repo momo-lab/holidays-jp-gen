@@ -4,8 +4,6 @@ node_modules/
 # ビルド成果物
 dist/
 build/
-test/holidays-jp.ts
-test/e2e-output
 
 # OS固有ファイル
 .DS_Store
