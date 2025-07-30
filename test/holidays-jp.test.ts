@@ -1,13 +1,16 @@
-import { describe, it, expect, beforeAll } from 'vitest';
 import fs from 'fs';
 import path from 'path';
-import { holidays, isHoliday, getHolidayName } from './holidays-jp';
+import { beforeAll, describe, expect, it } from 'vitest';
+import { getHolidayName, holidays, isHoliday } from './holidays-jp';
 
 describe('Holiday Utilities', () => {
   // holidays-jp.tsが事前に生成されていることを確認
   beforeAll(() => {
     const filePath = path.resolve(__dirname, 'holidays-jp.ts');
-    expect(fs.existsSync(filePath), 'test/holidays-jp.ts does not exist. Run `pnpm test:gen` first.').toBe(true);
+    expect(
+      fs.existsSync(filePath),
+      'test/holidays-jp.ts does not exist. Run `pnpm test:gen` first.'
+    ).toBe(true);
   });
 
   describe('isHoliday', () => {
