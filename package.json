@@ -11,6 +11,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "postbuild": "chmod +x dist/cli.js",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint .",

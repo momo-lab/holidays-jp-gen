@@ -2,7 +2,7 @@
 
 import { Command, Option, OptionValues } from 'commander';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
+import { pathToFileURL } from 'url';
 import { downloadCsv, generateTs, parseCsv } from './core.js';
 
 const DEFAULT_START_YEAR = 1955;
@@ -38,7 +38,7 @@ export async function main(options: OptionValues) {
 }
 
 // Run as CLI only when this file is executed directly
-const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
   const command = defineCommand();
   command.action(main);
