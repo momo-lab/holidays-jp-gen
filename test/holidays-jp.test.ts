@@ -33,9 +33,8 @@ describe('Holiday Utilities', () => {
   beforeAll(async () => {
     // ローカルのCSVファイルを読み込み、解析、フィルタリング、TSファイル生成
     const csvBuffer = await fs.readFile(FIXTURES_CSV_PATH);
-    const rawHolidays = parseCsv(csvBuffer);
-    const filteredHolidays = filterAndFormat(rawHolidays, 2024); // テスト用に2024年以降にフィルタリング
-    const tsContent = generateTs(filteredHolidays, 2024);
+    const holidays = parseCsv(csvBuffer);
+    const tsContent = generateTs(holidays, 2024);
     writeIfChanged(HOLIDAYS_JP_PATH, tsContent);
     module = await import(pathToFileURL(HOLIDAYS_JP_PATH).href);
   });

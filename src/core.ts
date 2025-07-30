@@ -2,7 +2,7 @@ import { parse } from 'csv-parse/sync';
 import https from 'https';
 import iconv from 'iconv-lite';
 
-export interface HolidayRaw {
+interface HolidayRaw {
   date: string; // yyyy/M/d
   name: string;
 }
@@ -34,25 +34,10 @@ export function parseCsv(buffer: Buffer): HolidayRaw[] {
   }));
 }
 
-export function filterAndFormat(
-  holidays: HolidayRaw[],
-  fromYear: number
-): string[] {
-  return holidays
-    .filter((h) => {
-      const y = Number(h.date.split('/')[0]);
-      return y >= fromYear;
-    })
-    .map((h) => {
-      const [y, m, d] = h.date.split('/');
-      const mm = m.padStart(2, '0');
-      const dd = d.padStart(2, '0');
-      return `"${y}-${mm}-${dd}": "${h.name}",`;
-    });
-}
-
-export function generateTs(holidays: string[], fromYear: number): string {
-  const holidays_str = holidays.map((v) => `  ${v}`).join('\n');
+export function generateTs(holidays: HolidayRaw[], fromYear: number): string {
+  const holidays_str = filterAndFormat(holidays, fromYear)
+    .map((v) => `  ${v}`)
+    .join('\n');
   return `// holidays-jp-from-${fromYear}.ts
 /**
  * @file 日本の祝日データと関連ユーティリティ
@@ -108,3 +93,18 @@ export const getHolidayName = (date: Date | string): string | null => {
 };
 `;
 }
+
+export function filterAndFormat(holidays: HolidayRaw[], fromYear: number): string[] {
+  return holidays
+    .filter((h) => {
+      const y = Number(h.date.split('/')[0]);
+      return y >= fromYear;
+    })
+    .map((h) => {
+      const [y, m, d] = h.date.split('/');
+      const mm = m.padStart(2, '0');
+      const dd = d.padStart(2, '0');
+      return `"${y}-${mm}-${dd}": "${h.name}",`;
+    });
+}
+
