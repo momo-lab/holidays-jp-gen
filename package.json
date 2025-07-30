@@ -10,8 +10,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "clean": "rimraf dist",
     "build": "tsc",
     "postbuild": "chmod +x dist/cli-entry.js",
+    "clean-build": "run-s clean build",
+    "prepack": "run-s clean-build",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint .",
@@ -20,9 +23,7 @@
     "lint-fix:eslint": "eslint --fix .",
     "lint-fix:prettier": "prettier --write .",
     "test": "vitest run",
-    "test-watch": "vitest",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run build"
+    "test-watch": "vitest"
   },
   "bin": {
     "holidays-jp-gen": "./dist/cli-entry.js"
@@ -55,6 +56,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.2.0",
     "prettier-plugin-sort-package-json": "^1.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.37.0",
     "vitest": "^3.2.4"
